@@ -100,4 +100,5 @@ const products = [
     }
 ];
 
-export default products;
+// Make products available globally
+window.products = products;

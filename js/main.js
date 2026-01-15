@@ -1,13 +1,12 @@
-import products from './products.js';
+const products = window.products;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Determine current page logic
-    const path = window.location.pathname;
-    const page = path.split('/').pop();
-
-    if (page === 'products.html' || page === '') { // handle root or product page
+    // Check which page we are on by looking for key elements
+    if (document.getElementById('products-container')) {
         initProductsPage();
-    } else if (page === 'product-detail.html') {
+    }
+
+    if (document.getElementById('product-detail-container')) {
         initProductDetailPage();
     }
 });
