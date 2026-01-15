@@ -1,0 +1,124 @@
+/* css/styles.css */
+/* Core Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* Custom Colors & Utilities */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+}
+
+/* Navbar Customization */
+.navbar-brand img {
+    object-fit: contain;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Hero Section */
+.hero {
+    /* Optional: keep gradient if wanted, or rely on white bg */
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(142, 68, 173, 0.05) 100%);
+}
+
+/* Feature Cards */
+.hover-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+/* Category Cards */
+.category-card {
+    height: 300px;
+    transition: transform 0.3s;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+}
+
+.category-card img {
+    transition: transform 0.5s;
+}
+
+.category-card:hover img {
+    transform: scale(1.1);
+}
+
+.bg-gradient-overlay {
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+}
+
+/* Footer */
+.hover-white:hover {
+    color: white !important;
+}
+
+.footer-logo img {
+    filter: brightness(0) invert(1); /* Make logo white for dark footer if needed */
+}
+
+/* Product Card */
+.product-card .card-img-top {
+    transition: transform 0.3s;
+}
+.product-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+/* Helper Classes */
+.fw-medium {
+    font-weight: 500;
+}
