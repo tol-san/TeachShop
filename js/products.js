@@ -5,7 +5,7 @@ const products = [
         category: "laptops",
         price: 1299,
         originalPrice: 1499,
-        image: "images/dell.png",
+        image: "images/dell.webp",
         specs: "Intel i7 • 16GB RAM • 512GB SSD • 13.3\" FHD",
         description: "The Dell XPS 13 is designed to be the best. With a 4-sided InfinityEdge display, it delivers an immersive screen experience.",
         featured: true
@@ -16,7 +16,7 @@ const products = [
         category: "laptops",
         price: 1099,
         originalPrice: 1199,
-        image: "images/macbookm2.png",
+        image: "images/macbookm2.webp",
         specs: "Apple M2 • 8GB RAM • 256GB SSD • 13.6\" Retina",
         description: "Supercharged by M2. The MacBook Air is strikigly thin and fast.",
         featured: true
@@ -27,7 +27,7 @@ const products = [
         category: "laptops",
         price: 999,
         originalPrice: null,
-        image: "images/asuszenbook.png",
+        image: "images/asuszenbook.webp",
         specs: "AMD Ryzen 7 • 16GB RAM • 1TB SSD • 14\" OLED",
         description: "Zenbook 14 OLED is built for effortless portability. It's your new favorite travel companion.",
         featured: false
@@ -38,7 +38,7 @@ const products = [
         category: "desktops",
         price: 2199,
         originalPrice: 2499,
-        image: "images/gammingPC.png",
+        image: "images/gammingPC.webp",
         specs: "RTX 4070 • Ryzen 9 • 32GB RAM • 1TB NVMe",
         description: "Dominate the competition with the Gaming PC Pro. High frames and low temperatures guaranteed.",
         featured: true
@@ -49,7 +49,7 @@ const products = [
         category: "desktops",
         price: 699,
         originalPrice: null,
-        image: "images/desktopoffice.png",
+        image: "images/desktopoffice.webp",
         specs: "Intel i5 • 16GB RAM • 512GB SSD • Windows 11",
         description: "Reliable performance for your daily office tasks. Compact and efficient.",
         featured: false
@@ -60,7 +60,7 @@ const products = [
         category: "desktops",
         price: 699,
         originalPrice: null,
-        image: "images/desktopmacbook.png",
+        image: "images/desktopmacbook.webp",
         specs: "Apple M2 • 16GB RAM • 512GB SSD • macOS",
         description: "More muscle. More hustle. The new Mac mini with M2 pro chip.",
         featured: false
@@ -71,7 +71,7 @@ const products = [
         category: "accessories",
         price: 99,
         originalPrice: null,
-        image: "images/mouse.png",
+        image: "images/mouse.webp",
         specs: "Wireless • 8000 DPI • Multi-device",
         description: "Meet the master. An icon remastered. Feel the performance.",
         featured: false
@@ -82,7 +82,7 @@ const products = [
         category: "accessories",
         price: 129,
         originalPrice: 149,
-        image: "images/keyboard.png",
+        image: "images/keyboard.webp",
         specs: "RGB • Hot-swappable • Bluetooth",
         description: "A wireless mechanical keyboard for everyone. VIA programmable.",
         featured: true
@@ -93,7 +93,7 @@ const products = [
         category: "accessories",
         price: 379,
         originalPrice: 429,
-        image: "images/dellMonitor.png",
+        image: "images/dellMonitor.webp",
         specs: "IPS • 4K UHD • USB-C • 60Hz",
         description: "See more and do more with a 27-inch 4K monitor.",
         featured: false

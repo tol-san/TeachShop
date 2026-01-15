@@ -40,7 +40,7 @@ function initProductsPage() {
         }
 
         filteredProducts.forEach(product => {
-            // console.log('Rendering product:', product.name);
+            // Rendering product
             const card = document.createElement('div');
             card.className = 'col-sm-6 col-lg-4 col-xl-3'; // Responsive grid
 
