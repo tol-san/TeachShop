@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('cart-container')) {
         initCartPage();
     }
+
+    if (document.getElementById('checkout-container')) {
+        initCheckoutPage();
+    }
 });
 
 function initProductsPage() {
@@ -259,7 +263,7 @@ function initCartPage() {
                                 <span class="h5 fw-bold">Total</span>
                                 <span class="h5 fw-bold text-primary">$${grandTotal}</span>
                             </div>
-                            <button class="btn btn-primary w-100 rounded-pill py-2" onclick="alert('Checkout functionality coming soon!')">Proceed to Checkout</button>
+                            <a href="checkout.html" class="btn btn-primary w-100 rounded-pill py-2">Proceed to Checkout</a>
                         </div>
                     </div>
                 </div>
@@ -274,4 +278,149 @@ function initCartPage() {
 
     // Register callback for reactivity
     Cart.onUpdate = renderCart;
+}
+
+function initCheckoutPage() {
+    const container = document.getElementById('checkout-container');
+    const cart = Cart.get();
+
+    if (cart.length === 0) {
+        window.location.href = 'cart.html';
+        return;
+    }
+
+    let grandTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+    const itemListHtml = cart.map(item => `
+        <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+                <h6 class="my-0">${item.name}</h6>
+                <small class="text-body-secondary">Qty: ${item.quantity}</small>
+            </div>
+            <span class="text-body-secondary">$${item.price * item.quantity}</span>
+        </li>
+    `).join('');
+
+    container.innerHTML = `
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Your cart</span>
+                    <span class="badge bg-primary rounded-pill">${cart.length}</span>
+                </h4>
+                <ul class="list-group mb-3 custom-shadow border-0">
+                    ${itemListHtml}
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <div class="text-success">
+                            <h6 class="my-0">Shipping</h6>
+                            <small>Free Shipping</small>
+                        </div>
+                        <span class="text-success">$0</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (USD)</span>
+                        <strong>$${grandTotal}</strong>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" id="checkout-form" novalidate>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">First name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="" required>
+                            <div class="invalid-feedback">
+                                Valid first name is required.
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Last name</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" required>
+                            <div class="invalid-feedback">
+                                Valid last name is required.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                            <div class="invalid-feedback">
+                                Please enter a valid email address for shipping updates.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                            <div class="invalid-feedback">
+                                Please enter your shipping address.
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="+855 ..." required>
+                            <div class="invalid-feedback">
+                                Please enter your phone number.
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4 class="mb-3">Payment</h4>
+
+                    <div class="my-3">
+                        <div class="form-check">
+                            <input id="cod" name="paymentMethod" type="radio" class="form-check-input" checked required>
+                            <label class="form-check-label" for="cod">Cash on Delivery</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="aba" name="paymentMethod" type="radio" class="form-check-input" required>
+                            <label class="form-check-label" for="aba">ABA Pay</label>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="w-100 btn btn-primary btn-lg rounded-pill" type="submit">Place Order</button>
+                </form>
+            </div>
+        </div>
+    `;
+
+    // Form Handling
+    const form = document.getElementById('checkout-form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            form.classList.add('was-validated');
+            return;
+        }
+
+        // Simulate Order Placement
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+
+        setTimeout(() => {
+            Cart.clear();
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success display-1"></i>
+                    </div>
+                    <h2 class="display-5 fw-bold text-success">Order Placed!</h2>
+                    <p class="lead mb-4">Thank you for your purchase. We will contact you shortly.</p>
+                    <a href="index.html" class="btn btn-primary rounded-pill px-5">Continue Shopping</a>
+                </div>
+            `;
+            // Optional: redirect after a few seconds
+            // setTimeout(() => window.location.href = 'index.html', 3000);
+        }, 1500);
+    });
 }
