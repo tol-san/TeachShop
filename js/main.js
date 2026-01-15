@@ -56,7 +56,7 @@ function initProductsPage() {
                         <p class="card-text small text-secondary mb-2">${product.specs}</p>
                         <div class="mt-auto">
                             <div class="mb-3">${priceHtml}</div>
-                            <button class="btn btn-primary w-100 rounded-pill mb-2" onclick="Cart.add(products.find(p => p.id === ${product.id}))">Add to Cart</button>
+                            <button class="btn btn-primary w-100 rounded-pill mb-2" onclick="Cart.add(${product.id})">Add to Cart</button>
                             <a href="product-detail.html?id=${product.id}" class="btn btn-outline-secondary w-100 rounded-pill">View Details</a>
                         </div>
                     </div>
@@ -158,7 +158,7 @@ function initProductDetailPage() {
                 </div>
 
                 <div class="d-grid gap-2 d-md-flex">
-                    <button class="btn btn-primary btn-lg rounded-pill px-5 flex-grow-1" onclick="Cart.add(products.find(p => p.id === ${product.id}))">Add to Cart</button>
+                    <button class="btn btn-primary btn-lg rounded-pill px-5 flex-grow-1" onclick="Cart.add(${product.id})">Add to Cart</button>
                     <a href="products.html" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Continue Shopping</a>
                 </div>
             </div>
@@ -168,100 +168,110 @@ function initProductDetailPage() {
 
 function initCartPage() {
     const container = document.getElementById('cart-container');
-    const cart = Cart.get();
 
-    if (cart.length === 0) {
-        container.innerHTML = `
-            <div class="text-center py-5">
-                <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
-                <h2 class="h4">Your cart is empty</h2>
-                <p class="text-muted mb-4">Looks like you haven't added any products yet.</p>
-                <a href="products.html" class="btn btn-primary rounded-pill px-4">Start Shopping</a>
+    // Define render function so it can be re-run
+    function renderCart() {
+        const cart = Cart.get();
+
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                    <h2 class="h4">Your cart is empty</h2>
+                    <p class="text-muted mb-4">Looks like you haven't added any products yet.</p>
+                    <a href="products.html" class="btn btn-primary rounded-pill px-4">Start Shopping</a>
+                </div>
+            `;
+            return;
+        }
+
+        let cartHtml = `
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body p-4">
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="text-secondary">
+                                        <tr>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+        `;
+
+        let grandTotal = 0;
+
+        cart.forEach(item => {
+            const itemTotal = item.price * item.quantity;
+            grandTotal += itemTotal;
+            cartHtml += `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="${item.image}" alt="${item.name}" class="rounded-3 me-3" style="width: 60px; height: 60px; object-fit: contain;">
+                            <h6 class="mb-0 fw-bold">${item.name}</h6>
+                        </div>
+                    </td>
+                    <td class="fw-bold">$${item.price}</td>
+                    <td>
+                        <div class="input-group input-group-sm" style="width: 100px;">
+                            <button class="btn btn-outline-secondary" onclick="Cart.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="Cart.updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                    </td>
+                    <td class="fw-bold text-primary">$${itemTotal}</td>
+                    <td>
+                        <button class="btn btn-link text-danger p-0" onclick="Cart.remove(${item.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        cartHtml += `
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Order Summary</h5>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-secondary">Subtotal</span>
+                                <span class="fw-bold">$${grandTotal}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="text-secondary">Shipping</span>
+                                <span class="text-success fw-bold">Free</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-4">
+                                <span class="h5 fw-bold">Total</span>
+                                <span class="h5 fw-bold text-primary">$${grandTotal}</span>
+                            </div>
+                            <button class="btn btn-primary w-100 rounded-pill py-2" onclick="alert('Checkout functionality coming soon!')">Proceed to Checkout</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
-        return;
+
+        container.innerHTML = cartHtml;
     }
 
-    let cartHtml = `
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
-                    <div class="card-body p-4">
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead class="text-secondary">
-                                    <tr>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Total</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-    `;
+    // Initial render
+    renderCart();
 
-    let grandTotal = 0;
-
-    cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
-        grandTotal += itemTotal;
-        cartHtml += `
-            <tr>
-                <td>
-                    <div class="d-flex align-items-center">
-                        <img src="${item.image}" alt="${item.name}" class="rounded-3 me-3" style="width: 60px; height: 60px; object-fit: contain;">
-                        <h6 class="mb-0 fw-bold">${item.name}</h6>
-                    </div>
-                </td>
-                <td class="fw-bold">$${item.price}</td>
-                <td>
-                    <div class="input-group input-group-sm" style="width: 100px;">
-                        <button class="btn btn-outline-secondary" onclick="Cart.updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
-                        <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
-                        <button class="btn btn-outline-secondary" onclick="Cart.updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
-                    </div>
-                </td>
-                <td class="fw-bold text-primary">$${itemTotal}</td>
-                <td>
-                    <button class="btn btn-link text-danger p-0" onclick="Cart.remove(${item.id})">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
-
-    cartHtml += `
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4">Order Summary</h5>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-secondary">Subtotal</span>
-                            <span class="fw-bold">$${grandTotal}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-3">
-                            <span class="text-secondary">Shipping</span>
-                            <span class="text-success fw-bold">Free</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="h5 fw-bold">Total</span>
-                            <span class="h5 fw-bold text-primary">$${grandTotal}</span>
-                        </div>
-                        <button class="btn btn-primary w-100 rounded-pill py-2" onclick="alert('Checkout functionality coming soon!')">Proceed to Checkout</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    container.innerHTML = cartHtml;
+    // Register callback for reactivity
+    Cart.onUpdate = renderCart;
 }
